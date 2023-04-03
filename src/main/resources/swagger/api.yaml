@@ -1,0 +1,310 @@
+openapi: 3.0.3
+info:
+  title: Pacific Campsite API
+  description: Pacific Campsite API
+  version: 1.0.0
+servers:
+  - url: 'http://localhost:8079'
+    description: Development server
+
+paths:
+  /reservations:
+    post:
+      summary: Create a new reservation
+      description: Create a new reservation
+      operationId: createReservation
+      tags:
+        - reservation
+      requestBody:
+        description: Reservation object that needs to be added to the store
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReservationWithUser'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReservationWithUser'
+        '400':
+          description: Invalid input
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/responses/Problem'
+        '500':
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/responses/Problem'
+    get:
+      summary: Get all reservations
+      description: Get all reservations
+      operationId: getReservations
+      tags:
+        - reservation
+      parameters:
+        - in: query
+          name: filters
+          required: false
+          schema:
+            $ref: '#/components/schemas/Filter'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  allOf:
+                    - $ref: '#/components/schemas/Reservation'
+
+
+
+        '500':
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/responses/Problem'
+
+  /reservations/{id}:
+    get:
+      summary: Get a reservation by id
+      description: Get a reservation by id
+      operationId: getReservationById
+      tags:
+        - reservation
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReservationWithUser'
+        '404':
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/responses/Problem'
+        '500':
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/responses/Problem'
+    patch:
+      summary: Update a reservation by id
+      description: Update a reservation by id
+      operationId: updateReservationById
+      tags:
+        - reservation
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        description: Reservation object that needs to be updated to the store
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReservationWithUser'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReservationWithUser'
+        '400':
+          description: Invalid input
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/responses/Problem'
+        '404':
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/responses/Problem'
+        '500':
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/responses/Problem'
+    delete:
+      summary: Cancel a reservation by id
+      description: Cancel a reservation by id
+      operationId: cancelReservationById
+      tags:
+        - reservation
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: No Content
+        '404':
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/responses/Problem'
+        '500':
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/responses/Problem'
+
+
+components:
+  responses:
+    Problem:
+      description: error occurred - see status code and problem object for more information.
+      content:
+        'application/problem+json':
+          schema:
+            $ref: 'https://opensource.zalando.com/problem/schema.yaml#/Problem'
+
+  schemas:
+    User:
+      type: object
+      description: User Schema
+      properties:
+        full_name:
+          description: The users Full Name
+          type: string
+          minLength: 10
+          maxLength: 100
+          example: User Full Name
+        email:
+          description: Email Name
+          type: string
+          format: email
+          minLength: 10
+          maxLength: 100
+          example: user@gmail.com
+        arrival_date:
+          description: Arrival Date
+          type: string
+          format: date
+          example: 2023-01-05
+        departure_date:
+          description: Departure Date
+          type: string
+          format: date
+          example: 2020-01-01
+      required:
+        - full_name
+        - email
+        - arrival_date
+        - departure_date
+
+    Reservation:
+      type: object
+      description: Reservation Schema
+      properties:
+        id:
+          description: Reservation Id
+          type: string
+          format: uuid
+          example: 123e4567-e89b-12d3-a456-426655440000
+          readOnly: true
+        start_date:
+          description: Start Date
+          type: string
+          format: date
+          example: 2020-01-01
+        end_date:
+          description: End Date
+          type: string
+          format: date
+          example: 2023-01-01
+        created_at:
+          description: Created At
+          type: string
+          pattern: "yyyy-MM-dd'T'HH:mm:ss.SSSXXX"
+          maxLength: 31
+          minLength: 31
+          example: 2023-04-14'T'03:14:01.315-03:00
+          readOnly: true
+        status:
+          description: Status
+          type: string
+          enum:
+            - PENDING
+            - CONFIRMED
+            - CANCELED
+          example: CONFIRMED
+          readOnly: true
+        updated_at:
+          description: Updated At
+          type: string
+          pattern: "yyyy-MM-dd'T'HH:mm:ss.SSSXXX"
+          maxLength: 31
+          minLength: 31
+          example: 2023-05-15'T'01:00:01.315-03:00
+          readOnly: true
+      required:
+        - start_date
+        - end_date
+
+    ReservationWithUser:
+      allOf:
+        - $ref: '#/components/schemas/Reservation'
+        - type: object
+          properties:
+            user:
+              $ref: '#/components/schemas/User'
+      required:
+        - reservation
+        - user
+
+
+    Filter:
+      description: Filter query parameters
+      type: object
+      properties:
+        start_date:
+          description: Started date
+          type: string
+          example: '2023-03-12T01:11:34.222Z'
+        end_date:
+          description: End date
+          type: string
+          example: '2022-03-12T01:11:34.222Z'
+        page:
+          description: Page number
+          type: integer
+          example: 1
+        size:
+          description: Page size
+          type: integer
+          example: 10
+      required:
+        - page
+        - size

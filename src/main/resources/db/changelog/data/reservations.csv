@@ -1,0 +1,4 @@
+id;start_date;end_date;email;full_name;arrival_date;departure_date;status;created_at;updated_at
+f7153579-c8f8-4990-a159-99ec616d05ba;2023-04-06;2023-04-07;secondUser@gmail.com;Second User;2023-04-05;2020-04-08;CONFIRMED;2023-04-03 07:28:18.736000;2023-04-03 07:28:18.736125
+e32a1c0c-7ff9-48f9-9525-530642060e41;2023-04-10;2023-04-13;firstUser@gmail.com;First User;2023-04-09;2023-04-14;CONFIRMED;2023-04-08 21:34:46.328386;2023-04-08 21:34:46.328398
+e1e3a46e-e60d-417d-b4f5-1fa95e41cca8;2023-04-25;2023-04-28;thirdUser@gmail.com;Third User;2023-04-22;2020-04-30;CONFIRMED;2023-04-03 07:54:50.901659;2023-04-03 07:54:50.901689

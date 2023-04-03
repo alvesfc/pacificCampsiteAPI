@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+
+    <property name="uuid_function" value="uuid_generate_v4()" dbms="postgresql"/>
+
+    <changeSet id="create_table_reservations" author="alvesfc">
+        <createTable tableName="reservations">
+            <column name="id" type="uuid" defaultValueComputed="${uuid_function}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="start_date" type="date">
+                <constraints nullable="false" />
+            </column>
+            <column name="end_date" type="date">
+                <constraints nullable="false" />
+            </column>
+            <column name="email" type="varchar(100)">
+                <constraints nullable="false" />
+            </column>
+            <column name="full_name" type="varchar(100)">
+                <constraints nullable="false" />
+            </column>
+            <column name="arrival_date" type="date">
+                <constraints nullable="false" />
+            </column>
+            <column name="departure_date" type="date">
+                <constraints nullable="false" />
+            </column>
+            <column name="status" type="varchar(30)">
+                <constraints nullable="false" />
+            </column>
+            <column name="created_at" type="datetime">
+                <constraints nullable="false" />
+            </column>
+            <column name="updated_at" type="datetime">
+                <constraints nullable="false" />
+            </column>
+
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>
